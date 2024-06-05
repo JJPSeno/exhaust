@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dq3yedbhy7wv3"]
+
+[ext_resource type="PackedScene" uid="uid://45d3ig44igdt" path="res://assets/kenney_graveyard-kit/Models/stone-wall-column.glb" id="1_icnbw"]
+[ext_resource type="Material" uid="uid://b1745p77qjpad" path="res://materials/dark_brown.tres" id="2_a6hrl"]
+
+[node name="WallColumned" instance=ExtResource("1_icnbw")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
+
+[node name="stone-wall-column" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_a6hrl")

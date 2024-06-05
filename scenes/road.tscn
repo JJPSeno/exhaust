@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://u4agagyr2eu"]
+
+[ext_resource type="PackedScene" uid="uid://dr08ho0fgwcxk" path="res://assets/kenney_graveyard-kit/Models/road.glb" id="1_yd6x0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ouw8t"]
+albedo_color = Color(0.168325, 0.179688, 0.127747, 1)
+
+[node name="road" instance=ExtResource("1_yd6x0")]
+
+[node name="road" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ouw8t")

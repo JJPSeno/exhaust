@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://cp57p6kwqxu0a"]
+
+[ext_resource type="Script" path="res://scripts/dummy.gd" id="1_nntng"]
+[ext_resource type="Material" uid="uid://6vwjbh04e6qo" path="res://materials/enemy_orange.tres" id="2_me6yq"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_hy1k8"]
+material = ExtResource("2_me6yq")
+radius = 0.3
+height = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_osm5j"]
+material = ExtResource("2_me6yq")
+top_radius = 0.2
+bottom_radius = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_y0u0m"]
+material = ExtResource("2_me6yq")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_whwcj"]
+radius = 0.619365
+height = 2.52846
+
+[node name="Dummy" type="Area3D" groups=["Enemy"]]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_nntng")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00235319, 0.896757, -0.00430727)
+mesh = SubResource("SphereMesh_hy1k8")
+
+[node name="Spine" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_osm5j")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.260907, 0)
+mesh = SubResource("BoxMesh_y0u0m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_whwcj")
+
+[connection signal="area_shape_entered" from="." to="." method="_on_area_shape_entered"]
