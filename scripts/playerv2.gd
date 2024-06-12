@@ -9,19 +9,15 @@ const fall_gravity = 20 * 3
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity
-var is_attacking
 var extraVelMulti = 125
 var extraVel = Vector3.ZERO
 var direction
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
-@onready var animation_player = $AnimationPlayer
-@onready var attack_melee_timer = $AttackMeleeTimer
 @onready var hit_box = $WeaponPivot/WeaponMesh/HitBox
 
 func _ready():
 	gravity = base_gravity
-	animation_player.play("idle")
 	hit_box.monitorable = false
 	hit_box.monitoring = false
 
@@ -45,11 +41,6 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	
-	if Input.is_action_just_pressed("dash"):
-		dash()
-	
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("left", "right", "forward", "back")
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
@@ -61,20 +52,15 @@ func _physics_process(delta):
 		velocity.z = 0
 	
 	extraVel = lerp(extraVel,Vector3.ZERO, 0.1)
+
+	if Input.is_action_just_pressed("dash"):
+		dash()
+	
 	velocity += extraVel
 	move_and_slide()
-	
-	if Input.is_action_just_pressed("attack_melee"):
-		attack_melee_timer.start()
-		is_attacking = true
-		animation_player.play("attack")
 
 func dash():
 	extraVel += direction * extraVelMulti
-	#extraVel += (Vector3(transform.origin.x,0,transform.origin.z)-Vector3(camera.transform.origin.x,0,camera.transform.origin.z)).normalized() * extraVelMulti
-func _on_attack_melee_timer_timeout():
-	is_attacking = false
-	animation_player.play("idle")
 
 func _on_hit_box_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	print("Oof")

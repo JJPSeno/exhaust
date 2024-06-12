@@ -26,17 +26,19 @@ collision_mask = 0
 script = ExtResource("1_nntng")
 
 [node name="Head" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00235319, 0.896757, -0.00430727)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00235319, 1, -0.00430727)
 mesh = SubResource("SphereMesh_hy1k8")
 
 [node name="Spine" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CylinderMesh_osm5j")
 
 [node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.260907, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("BoxMesh_y0u0m")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_whwcj")
 
 [connection signal="area_shape_entered" from="." to="." method="_on_area_shape_entered"]

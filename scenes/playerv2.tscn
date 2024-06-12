@@ -1,6 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://djyh7ixisbx5u"]
+[gd_scene load_steps=16 format=3 uid="uid://djyh7ixisbx5u"]
 
 [ext_resource type="Script" path="res://scripts/playerv2.gd" id="1_27wgf"]
+[ext_resource type="Script" path="res://scripts/PlayerStates/PlayerStateMachine.gd" id="2_l4oct"]
+[ext_resource type="Script" path="res://scripts/PlayerStates/PlayerIdle.gd" id="3_i2j05"]
+[ext_resource type="Script" path="res://scripts/PlayerStates/PlayerMove.gd" id="4_154vx"]
+[ext_resource type="Script" path="res://scripts/PlayerStates/PlayerAttack.gd" id="5_15pof"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kg70t"]
 albedo_color = Color(0.528814, 0.301136, 0.672493, 1)
@@ -122,6 +126,20 @@ tracks/3/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateMachine/PlayerAttack")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"attack_finished"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_jxunm"]
 resource_name = "idle"
@@ -176,17 +194,19 @@ collision_layer = 2
 script = ExtResource("1_27wgf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_3i7x8")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.827237, -0.561852, 0, 0.561852, 0.827237, 0, 0.846677, -0.259723)
+transform = Transform3D(1, 0, 0, 0, 0.827237, -0.561852, 0, 0.561852, 0.827237, 0, 1, -0.259723)
 mesh = SubResource("BoxMesh_ullhe")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("ConvexPolygonShape3D_nnwaf")
 
 [node name="WeaponPivot" type="Node3D" parent="."]
-transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 0, 0, 0)
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 0, 1, 0)
 
 [node name="WeaponMesh" type="MeshInstance3D" parent="WeaponPivot"]
 transform = Transform3D(-0.392698, -0.885797, -0.247292, 0.914125, -0.405434, 0.000638266, -0.100826, -0.225805, 0.968942, 0.981895, 0.426769, -0.529556)
@@ -203,9 +223,10 @@ transform = Transform3D(1, 0, 0, 2.98023e-08, 1, -2.98023e-08, 2.98023e-08, 2.98
 shape = SubResource("ConvexPolygonShape3D_5scdg")
 
 [node name="Head" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.995461, 0.095168, 0, -0.095168, 0.995461, 0, 2.18462, 3.79482)
+transform = Transform3D(1, 0, 0, 0, 0.995461, 0.095168, 0, -0.095168, 0.995461, 0, 1, 3.79482)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.11114, 0.201829)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -213,9 +234,19 @@ libraries = {
 }
 autoplay = "idle"
 
-[node name="AttackMeleeTimer" type="Timer" parent="."]
-wait_time = 0.9
-one_shot = true
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_l4oct")
+initial_state = NodePath("PlayerIdle")
+
+[node name="PlayerIdle" type="Node" parent="StateMachine" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("3_i2j05")
+animation_player = NodePath("../../AnimationPlayer")
+
+[node name="PlayerMove" type="Node" parent="StateMachine"]
+script = ExtResource("4_154vx")
+
+[node name="PlayerAttack" type="Node" parent="StateMachine" node_paths=PackedStringArray("animation_player")]
+script = ExtResource("5_15pof")
+animation_player = NodePath("../../AnimationPlayer")
 
 [connection signal="area_shape_entered" from="WeaponPivot/WeaponMesh/HitBox" to="." method="_on_hit_box_area_shape_entered"]
-[connection signal="timeout" from="AttackMeleeTimer" to="." method="_on_attack_melee_timer_timeout"]

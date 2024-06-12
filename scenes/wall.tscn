@@ -1,10 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://de4ev78e4gbyu"]
+[gd_scene load_steps=4 format=3 uid="uid://de4ev78e4gbyu"]
 
 [ext_resource type="PackedScene" uid="uid://c2nbawwt8mero" path="res://assets/kenney_graveyard-kit/Models/stone-wall.glb" id="1_pqh1c"]
 [ext_resource type="Material" uid="uid://b1745p77qjpad" path="res://materials/dark_brown.tres" id="2_2iiiq"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_qy5q3"]
+points = PackedVector3Array(-0.507937, -0.0078713, -0.507937, 0.507937, 0.658665, -0.412714, 0.507937, 0.658665, -0.492048, -0.507937, 0.658665, -0.412714, 0.479105, 0.0110458, -0.4, 0.507937, -0.0078713, -0.507937, -0.479105, 0.0110458, -0.4, -0.507937, 0.658665, -0.492048, 0.507937, 0.103251, -0.396847, -0.507937, 0.103251, -0.396847, 0.507937, 0.103251, -0.507937, -0.507937, 0.103251, -0.507937)
 
 [node name="stone-wall2" instance=ExtResource("1_pqh1c")]
 
 [node name="stone-wall" parent="." index="0"]
 transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
 surface_material_override/0 = ExtResource("2_2iiiq")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_qy5q3")
